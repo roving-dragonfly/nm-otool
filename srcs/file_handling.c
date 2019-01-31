@@ -1,21 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_get_endianness.c                                :+:      :+:    :+:   */
+/*   file_handling.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/31 22:12:19 by aalves            #+#    #+#             */
-/*   Updated: 2019/01/31 22:12:19 by aalves           ###   ########.fr       */
+/*   Created: 2019/01/31 21:50:46 by aalves            #+#    #+#             */
+/*   Updated: 2019/01/31 22:02:51 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "nm.h"
 
-int32_t	ft_get_endianness(void)
+int		open_file(char *filename)
 {
-	short	tester;
+	int	fd;
 
-	tester = 0x0001;
-	return (*(char*)&tester == 0x01);
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+	{
+		ft_error(2, (char*[]){"open : ", filename}, T_OPEN_FAILED);
+		return (0);
+	}
+    return (fd);
+}
+
+void	close_file(t_binfile *file, int fd)
+{
+	if (close(fd))
+		ft_error_exit(2, (char*[]){"close : ", file->file}, T_CLOSE_FAILED);
 }

@@ -1,29 +1,31 @@
-NAME = nm-otool
+NM = ft_nm
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
-SRCS =	srcs/test.c \
-	srcs/endianess.c
+SRCS =	srcs/nm.c \
+        srcs/file_handling.c \
+	srcs/file_mapping.c 
 
 OBJS = $(SRCS:.c=.o)
-INCLUDES = -I./includes
+LIBFT = ./libft/
+INCLUDES = -I./includes -I./libft/includes
+LFT = -L./libft -lft
 RM = rm -f
 
 .c.o:
 	$(CC) $(FLAGS) -fPIC $(INCLUDES) -o $@ -c $<
 
-all: $(NAME)
+all: $(NM)
 
-$(NAME): $(OBJS)
-	make -C ./libft/
-	$(CC) $(INCLUDES) -o $(NAME) $^ ./libft/libft.a 
+$(NM): $(OBJS)
+	make -C $(LIBFT)
+	$(CC) $(INCLUDES) -o $(NM) $^ $(LFT)
 
 clean:
-	make -C ./libft/ clean
+	make -C $(LIBFT) clean
 	$(RM) $(OBJS)
 
 fclean: clean
-	make -C ./libft/ fclean
-	$(RM) $(NAME)
+	make -C $(LIBFT) fclean
+	$(RM) $(NM)
 
 re: fclean all
-
