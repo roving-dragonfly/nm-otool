@@ -3,7 +3,8 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 SRCS =	srcs/nm.c \
         srcs/file_handling.c \
-	srcs/file_mapping.c 
+	srcs/file_mapping.c \
+	srcs/parse_cl.c
 
 OBJS = $(SRCS:.c=.o)
 LIBFT = ./libft/
