@@ -6,7 +6,7 @@
 /*   By: sclolus <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/04 11:35:25 by sclolus           #+#    #+#             */
-/*   Updated: 2018/02/03 03:15:43 by aalves           ###   ########.fr       */
+/*   Updated: 2019/01/29 21:42:48 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,6 @@ unsigned int	ft_max(unsigned int a, unsigned int b);
 unsigned int	ft_is_power_of_two(unsigned long long nbr);
 
 uint64_t		ft_random(void);
-//void			ft_sort(int64_t	*tab, uint32_t len);
 void			ft_sort(void *tab, size_t elem_nbr, size_t type_size
 						, int (*compar)(const void *, const void *));
 void			ft_sort_strings(char **strings, uint32_t n);

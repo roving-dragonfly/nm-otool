@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalves  <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: aalves <aalves@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/13 15:33:53 by aalves            #+#    #+#             */
-/*   Updated: 2019/01/23 09:19:41 by aalves           ###   ########.fr       */
+/*   Created: 2019/01/29 21:49:14 by aalves            #+#    #+#             */
+/*   Updated: 2019/01/29 21:51:31 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ inline static size_t	ft_sus_addr(unsigned long *longword_ptr, const char *s)
 		return (tmp - s + 7);
 }
 
-size_t			ft_strlen(const char *s)
+size_t					ft_strlen(const char *s)
 {
 	unsigned long	*longword_ptr;
 	unsigned char	*tmp;
