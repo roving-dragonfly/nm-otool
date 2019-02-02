@@ -6,7 +6,8 @@ NM_SRCS =	srcs/nm/file_handling.c \
 		srcs/nm/nm.c \
 		srcs/nm/parse_file.c \
                 srcs/nm/parse_cl.c \
-		srcs/nm/parse_fat_header.c \
+                srcs/nm/parse_fat_header.c \
+		srcs/nm/parse_fat_arch.c \
                 srcs/nm/parse_macho_header.c \
                 srcs/nm/parse_load_commands.c \
 		srcs/nm/cleanup.c \

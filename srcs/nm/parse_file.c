@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/02 15:32:04 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/02 18:31:04 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/02 18:56:11 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int parse_file(t_binfile *file, void *start)
 	printf("Parsing %p\n", start);
 	if (parse_fat_header(file, &meta.fat, start))
 	{
-        //parse_fat_arch(&meta);
+        parse_fat_arch(&meta.fat);
 		//foreach arch parse_file
 	}
 	else if (parse_macho_header(file, &meta.macho, start))

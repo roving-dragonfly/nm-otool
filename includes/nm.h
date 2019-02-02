@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 21:50:26 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/02 18:31:55 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/02 18:55:56 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,10 @@ int				 parse_file(t_binfile *file, void *start);
 */
 int				parse_fat_header(t_binfile *file, t_fat *metadata, void *start);
 
+/*
+** parse_fat_arch.c
+*/
+int				parse_fat_arch(t_fat *meta);
 /*
 ** parse_macho_header.c
 */
