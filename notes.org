@@ -1,0 +1,19 @@
+* Fat files
+Use magic number of the header to determine need to swap
+** fat_arch
+Always stored in big endian regarless of the host arch
+
+* Arch
+
+Need to split t_binfile
+
+- Metadata about opened file (contains tab of sections)
+- Macho section
+* Binaries
+** x86_64 mach-o
+bash
+df
+ps (setuid)
+** fat
+sync
+wait4path
