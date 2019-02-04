@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 21:50:26 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/04 19:11:41 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/04 20:13:38 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 # define T_PARSING_FAILED 6
 # define T_CORRUPT_FILE 7
 
+# define T_STATIC_MAGIC 0x213C617263683E0A
+# define T_STATIC_CIGAM 0X0A3E686372613C21
 
 # define T_NM_FLAGS "gpr"
 # define T_EXTERNAL_FLAG	0x0000000000000001
@@ -69,6 +71,21 @@ struct	s_symbol
 };
 typedef struct s_symbol t_symbol;
 
+struct	s_fat
+{
+	t_binfile					*file;
+	struct fat_header			hdr;
+	uint64_t					is64;
+	void						*arch_start;
+	union u_arch
+	{
+		struct fat_arch			fat32;
+		struct fat_arch_64		fat64;
+	}							**arch;
+	struct s_swap				*s;
+};
+typedef struct s_fat t_fat;
+
 struct	s_macho
 {
 	t_binfile					*file;
@@ -85,25 +102,18 @@ struct	s_macho
 };
 typedef	struct s_macho t_macho;
 
-struct	s_fat
+struct	s_static_lib
 {
 	t_binfile					*file;
-	struct fat_header			hdr;
-	uint64_t					is64;
-	void						*arch_start;
-	union u_arch
-	{
-		struct fat_arch			fat32;
-		struct fat_arch_64		fat64;
-	}							**arch; //table of arch ptrs
 	struct s_swap				*s;
 };
-typedef struct s_fat t_fat;
+typedef	struct s_static_lib t_static_lib;
 
 union	u_metadata
 {
     t_macho						macho;
 	t_fat						fat;
+	t_static_lib				ar;
 };
 
 /*
@@ -115,7 +125,7 @@ void			ft_nm(t_proc_infos *cmd, t_binfile *file);
 /*
 ** parse_cl.c
 */
-t_proc_infos		*parse_cl(int argc, char **argv);
+t_proc_infos   	*parse_cl(int argc, char **argv);
 
 /*
 ** endianess.c
@@ -143,6 +153,11 @@ int				 parse_file(t_binfile *file, void *start);
 ** parse_fat_header.c
 */
 int				parse_fat_header(t_binfile *file, t_fat *metadata, void *start);
+
+/*
+** parse_static_lib_header.c
+*/
+int				parse_static_lib_header(t_binfile *file, t_static_lib *metadata, void *start);
 
 /*
 ** parse_fat_arch.c

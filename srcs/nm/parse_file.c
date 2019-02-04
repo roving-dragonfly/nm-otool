@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/02 15:32:04 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/04 19:28:16 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/04 20:19:03 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,10 @@ int parse_file(t_binfile *file, void *start)
 //		print_macho_header(&meta.macho);
 //		print_lc_tab(&meta.macho);
 		print_sym_tab(&meta.macho);
+	}
+	else if (parse_static_lib_header(file, &meta.ar, start))
+	{
+		printf("STATIC LIB\n");
 	}
 	else
 	{
