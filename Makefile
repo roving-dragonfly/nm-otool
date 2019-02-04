@@ -12,7 +12,8 @@ NM_SRCS =	srcs/nm/file_handling.c \
                 srcs/nm/parse_load_commands.c \
                 srcs/nm/explore_fat_archs.c \
                 srcs/nm/extract_symbols.c \
-		srcs/nm/parse_symtable.c \
+                srcs/nm/parse_symtable.c \
+		srcs/nm/populate_symtable.c \
 		srcs/nm/cleanup.c \
 		srcs/nm/swapping/swap_tab.c \
 		srcs/nm/swapping/swap_uint16.c \

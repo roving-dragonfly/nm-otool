@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/02 15:32:04 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/04 15:22:49 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/04 18:50:27 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	print_lc_tab(t_macho *meta)
 	while (meta->lc_tab[i])
 	{
 		lc = meta->lc_tab[i];
-		printf("Load command : %.8llx\tsize %.8llx\n", swap_uint32(meta->s, lc->cmd), swap_uint32(meta->s, lc->cmdsize));
+		printf("Load command : %.8x\tsize %.8x\n", swap_uint32(meta->s, lc->cmd), swap_uint32(meta->s, lc->cmdsize));
 		i++;
 	}
 }
@@ -88,6 +88,40 @@ static void print_fat_arch(t_fat *meta)
 	}
 }
 
+static void print_symbol(t_list *sym_link)
+{
+	t_symbol *sym = (t_symbol*)sym_link->content;
+	printf("Symbol:\n");
+    if (sym->is64)
+	{
+		printf("n_strx : %.8x\n", sym->nlist.n64.n_un.n_strx);
+        printf("n_type : %x\n", sym->nlist.n64.n_type);
+		printf("n_sect : %x\n", sym->nlist.n64.n_sect);
+        printf("n_desc : %.4x\n", sym->nlist.n64.n_desc);
+		printf("n_value : %.16llx\n", sym->nlist.n64.n_value);
+	}
+	else
+	{
+		printf("n_strx : %.8x\n", sym->nlist.n32.n_un.n_strx);
+		printf("n_type : %x\n", sym->nlist.n32.n_type);
+		printf("n_sect : %x\n", sym->nlist.n32.n_sect);
+		printf("n_desc : %.4x\n", sym->nlist.n32.n_desc);
+		printf("n_value : %.8x\n", sym->nlist.n32.n_value);
+	}
+}
+
+static void print_sym_tab(t_macho *meta)
+{
+    t_list *link;
+
+	link = meta->sym_list;
+	while (link)
+	{
+		print_symbol(link);
+		link = link->next;
+	}
+}
+
 /*
 ** Recursively parses file by format, populating symbol table on the way
 */
@@ -114,8 +148,9 @@ int parse_file(t_binfile *file, void *start)
 		if (!parse_load_commands(&meta.macho))
 			return (0);
 		print_lc_tab(&meta.macho);
-		//populate symtable
-		extract_symbols(&meta.macho);
+		if (!extract_symbols(&meta.macho))
+			return (0);
+		print_sym_tab(&meta.macho);
         cleanup_macho(&meta.macho); //if 0 is returned still call this
 	}
 	else

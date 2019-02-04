@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 21:50:26 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/04 16:48:49 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/04 18:34:56 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,17 @@ struct	s_binfile
 };
 typedef	struct s_binfile t_binfile;
 
+struct	s_symbol
+{
+	uint64_t					is64;
+	union u_nlist
+	{
+		struct nlist			n32;
+		struct nlist_64			n64;
+	}							nlist;
+};
+typedef struct s_symbol t_symbol;
+
 struct	s_macho
 {
 	t_binfile					*file;
@@ -68,7 +79,8 @@ struct	s_macho
 	uint64_t					is64;
 	struct s_swap				*s;
 	void						*lc_start;
-	void						**lc_tab; //table of load commands (all of it) but better to point to the location only one alloc
+	void						**lc_tab;
+	t_list						*sym_list;
 };
 typedef	struct s_macho t_macho;
 
@@ -159,6 +171,11 @@ int				extract_symbols(t_macho *meta);
 ** parse_symtab.c
 */
 int				parse_symtable(t_macho *meta, struct symtab_command *symtab);
+
+/*
+** populate_symtab.c
+*/
+int				populate_symtable(t_macho *meta, struct symtab_command *symtab);
 
 /*
 ** cleanup.c
