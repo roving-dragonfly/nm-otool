@@ -10,9 +10,13 @@ NM_SRCS =	srcs/nm/file_handling.c \
 		srcs/nm/parse_fat_arch.c \
                 srcs/nm/parse_macho_header.c \
                 srcs/nm/parse_load_commands.c \
+                srcs/nm/explore_fat_archs.c \
+                srcs/nm/extract_symbols.c \
+		srcs/nm/parse_symtable.c \
 		srcs/nm/cleanup.c \
 		srcs/nm/swapping/swap_tab.c \
-		srcs/nm/swapping/swap_uint32.c \
+		srcs/nm/swapping/swap_uint16.c \
+                srcs/nm/swapping/swap_uint32.c \
 		srcs/nm/swapping/swap_uint64.c 
 
 NM_OBJS = $(NM_SRCS:.c=.o)

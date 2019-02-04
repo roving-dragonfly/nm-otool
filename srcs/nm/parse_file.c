@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/02 15:32:04 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/02 18:56:11 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/04 15:22:49 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,43 @@ static void	print_lc_tab(t_macho *meta)
 	while (meta->lc_tab[i])
 	{
 		lc = meta->lc_tab[i];
-		printf("Load command : %.16llx\tsize %.16llx\n", swap_uint64(meta->s, lc->cmd), swap_uint64(meta->s, lc->cmdsize));
+		printf("Load command : %.8llx\tsize %.8llx\n", swap_uint32(meta->s, lc->cmd), swap_uint32(meta->s, lc->cmdsize));
+		i++;
+	}
+}
+
+static void print_fat_header(t_fat *meta)
+{
+    if (meta->is64)
+        printf("Fat Header 64 :\n");
+	else
+		printf("Fat Header 32 :\n");
+
+	printf("Magic : %x \nnfat_arch : %x\n", meta->hdr.magic, meta->hdr.nfat_arch);
+}
+
+static void print_fat_arch(t_fat *meta)
+{
+	size_t i = 0;
+
+	while (meta->arch[i])
+	{
+		printf("\nfat_arch %lu\n", i);
+        printf("cputype : %x\n", swap_uint32(meta->s, meta->arch[i]->fat32.cputype));
+        printf("cpusubtype : %x\n", swap_uint32(meta->s, meta->arch[i]->fat32.cpusubtype));
+		if (meta->is64)
+		{
+            printf("offset : %llu\n", swap_uint64(meta->s, meta->arch[i]->fat64.offset));
+            printf("size : %llu\n", swap_uint64(meta->s, meta->arch[i]->fat64.size));
+            printf("align : %ld\n", ft_pow(2, swap_uint32(meta->s, meta->arch[i]->fat64.align)));
+			printf("reserved : %x\n", swap_uint32(meta->s, meta->arch[i]->fat64.reserved));
+		}
+		else
+		{
+			printf("offset : %u\n", swap_uint32(meta->s, meta->arch[i]->fat32.offset));
+			printf("size : %u\n", swap_uint32(meta->s, meta->arch[i]->fat32.size));
+			printf("align : %ld\n", ft_pow(2, swap_uint32(meta->s, meta->arch[i]->fat32.align)));
+		}
 		i++;
 	}
 }
@@ -63,8 +99,14 @@ int parse_file(t_binfile *file, void *start)
 	printf("Parsing %p\n", start);
 	if (parse_fat_header(file, &meta.fat, start))
 	{
-        parse_fat_arch(&meta.fat);
-		//foreach arch parse_file
+		//When dev is done regroup all this in a if (... || ...)
+		print_fat_header(&meta.fat);
+		if (!parse_fat_arch(&meta.fat))
+			return (0);
+		print_fat_arch(&meta.fat);
+		if (!explore_fat_archs(&meta.fat))
+			return (0);
+		cleanup_fat(&meta.fat); //if 0 is returned still call this
 	}
 	else if (parse_macho_header(file, &meta.macho, start))
 	{
@@ -73,7 +115,8 @@ int parse_file(t_binfile *file, void *start)
 			return (0);
 		print_lc_tab(&meta.macho);
 		//populate symtable
-        cleanup_macho(&meta.macho);
+		extract_symbols(&meta.macho);
+        cleanup_macho(&meta.macho); //if 0 is returned still call this
 	}
 	else
 	{

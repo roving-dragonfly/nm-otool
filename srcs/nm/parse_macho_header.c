@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/01 13:30:05 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/02 18:25:26 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/04 13:18:42 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	parse_macho_header(t_binfile *file, t_macho *metadata, void *start)
 		metadata->is64 = 1;
 	else
 		return (0);
-	printf("IS MACH-O\n");
 	metadata->s = (magic == MH_MAGIC || magic == MH_MAGIC_64) ?
 		noswap_tab(): swap_tab();
 	set_macho_header(metadata, start);

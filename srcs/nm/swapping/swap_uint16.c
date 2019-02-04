@@ -1,23 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cleanup.c                                          :+:      :+:    :+:   */
+/*   swap_uint16.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/02 14:30:45 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/04 14:03:54 by aalves           ###   ########.fr       */
+/*   Created: 2019/02/04 16:48:12 by aalves            #+#    #+#             */
+/*   Updated: 2019/02/04 16:48:53 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
 
-void	cleanup_macho(t_macho *meta)
+uint16_t	swap_uint16(t_swap *s, uint16_t n)
 {
-	free(meta->lc_tab);
+	return (s->tab->swap_uint16(n));
 }
 
-void	cleanup_fat(t_fat *meta)
+uint16_t rev_uint16(uint16_t n)
 {
-	free(meta->arch);
+	return (swap_int16(n));
+}
+
+uint16_t std_uint16(uint16_t n)
+{
+    return (n);
 }

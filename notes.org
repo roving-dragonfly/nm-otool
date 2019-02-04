@@ -17,3 +17,11 @@ ps (setuid)
 ** fat
 sync
 wait4path
+
+
+* Breaking shiet
+** File is 0 byte
+** Recursive fat into oblivion
+** File abrubly ends in the middle of a fat_arch || load_command parsing
+ofc on a multiple of page_size
+** n_strx points to a corrupt value

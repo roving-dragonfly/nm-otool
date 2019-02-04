@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 21:50:26 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/02 18:55:56 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/04 16:48:49 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ struct	s_fat
 	t_binfile					*file;
 	struct fat_header			hdr;
 	uint64_t					is64;
+	void						*arch_start;
 	union u_arch
 	{
 		struct fat_arch			fat32;
@@ -133,6 +134,7 @@ int				parse_fat_header(t_binfile *file, t_fat *metadata, void *start);
 ** parse_fat_arch.c
 */
 int				parse_fat_arch(t_fat *meta);
+
 /*
 ** parse_macho_header.c
 */
@@ -144,9 +146,25 @@ int				parse_macho_header(t_binfile *file, t_macho *metadata, void *start);
 int				parse_load_commands(t_macho *meta);
 
 /*
+** explore_fat_archs.c
+*/
+int				explore_fat_archs(t_fat *meta);
+
+/*
+** extract_symbols.c
+*/
+int				extract_symbols(t_macho *meta);
+
+/*
+** parse_symtab.c
+*/
+int				parse_symtable(t_macho *meta, struct symtab_command *symtab);
+
+/*
 ** cleanup.c
 */
 void			cleanup_macho(t_macho *meta);
+void			cleanup_fat(t_fat *meta);
 
 /*
 ** Swapping interface
@@ -159,7 +177,8 @@ typedef struct s_swap t_swap;
 
 struct	s_swap_interface
 {
-	uint32_t	(*swap_uint32)(uint32_t);
+	uint16_t	(*swap_uint16)(uint16_t);
+    uint32_t	(*swap_uint32)(uint32_t);
 	uint64_t	(*swap_uint64)(uint64_t);
 };
 
@@ -173,5 +192,9 @@ uint32_t	std_uint32(uint32_t n);
 uint64_t	swap_uint64(t_swap *s, uint64_t n);
 uint64_t	rev_uint64(uint64_t n);
 uint64_t	std_uint64(uint64_t n);
+
+uint16_t	swap_uint16(t_swap *s, uint16_t n);
+uint16_t	rev_uint16(uint16_t n);
+uint16_t	std_uint16(uint16_t n);
 
 #endif
