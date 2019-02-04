@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/02 17:17:26 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/02 18:29:28 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/04 19:18:04 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int	main(int argc, char **argv)
 {
-	int			i;
-	int			fd;
-	t_command	*cmd;
-	t_binfile	file;
+	int				i;
+	int				fd;
+	t_proc_infos	*cmd;
+	t_binfile		file;
 
 	if (!(cmd = parse_cl(argc, argv)))
 		return (1);
@@ -26,7 +26,7 @@ int	main(int argc, char **argv)
 	{
 		ft_bzero(&file, sizeof(file));
         file.filename = cmd->files[i];
-		if (cmd->n_files > 1)//put this in nm
+		if (cmd->n_files > 1)//put this in nm printer
 		{
 			ft_putstr(cmd->files[i]);
 			ft_putstr(":\n");
@@ -42,16 +42,8 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
-
-
-void	ft_nm(t_command *cmd, t_binfile *file)
+void	ft_nm(t_proc_infos *cmd, t_binfile *file)
 {
-
-    if (!parse_file(file, file->start))
+	if (!parse_file(file, file->start))
 		return ;
-	//	print_lc_tab(file);
-
-
-	//cleanup stage
-	//	free_lc_tab(file);
 }

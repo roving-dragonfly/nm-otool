@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 21:50:26 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/04 18:34:56 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/04 19:11:41 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,15 @@
 # define T_EXTERNAL_FLAG	0x0000000000000001
 # define T_NOSORT_FLAG		0x0000000000000002
 # define T_REVERSESORT_FLAG	0x0000000000000004
-struct	s_command
+
+struct	s_proc_infos
 {
 	uint64_t		flags;
 	uint64_t		n_files;
 	char			**files;
 
 };
-typedef	struct s_command t_command;//better naming would be proc_infos
+typedef	struct s_proc_infos t_proc_infos;
 
 struct	s_binfile
 {
@@ -109,16 +110,17 @@ union	u_metadata
 ** nm.c
 */
 int				main(int argc, char **argv);
-void			ft_nm(t_command *cmd, t_binfile *file);
+void			ft_nm(t_proc_infos *cmd, t_binfile *file);
+
 /*
 ** parse_cl.c
 */
-t_command		*parse_cl(int argc, char **argv);
+t_proc_infos		*parse_cl(int argc, char **argv);
 
 /*
 ** endianess.c
 */
-void			set_system_endianess(t_command *cmd);
+void			set_system_endianess(t_proc_infos *cmd);
 
 /*
 ** file_handling.c

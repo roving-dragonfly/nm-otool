@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 13:51:03 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/04 16:16:21 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/04 19:27:39 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	explore_fat_archs(t_fat *meta)
     i = 0;
     while (i < meta->hdr.nfat_arch)
 	{
-		printf("\nParsing %lu\n", i);
 		arch = meta->is64 ?
 			meta->file->start +
 			swap_uint64(meta->s, meta->arch[i]->fat64.offset) :

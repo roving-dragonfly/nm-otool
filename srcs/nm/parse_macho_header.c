@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/01 13:30:05 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/04 13:18:42 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/04 19:23:42 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int	parse_macho_header(t_binfile *file, t_macho *metadata, void *start)
 {
 	uint32_t	magic;
 
+	if (start > file->end - sizeof(struct mach_header_64))
+		return (0);
 	metadata->file = file;
 	magic = *(uint32_t*)start;
 	if (magic == MH_MAGIC || magic == MH_CIGAM)

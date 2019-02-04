@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 23:06:39 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/01 00:33:22 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/04 19:12:23 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ static void	put_usage()
 	ft_putstr("-r\t\tReverse sort\n");
 }
 
-t_command	*parse_cl(int argc, char **argv)
+t_proc_infos	*parse_cl(int argc, char **argv)
 {
-	static t_command	cmd;
+	static t_proc_infos	cmd;
 	static char			*default_file[1];
 	char				flag;
 

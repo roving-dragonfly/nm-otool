@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/02 15:32:04 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/04 18:50:27 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/04 19:28:16 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,28 +130,27 @@ int parse_file(t_binfile *file, void *start)
 	union u_metadata	meta;
 
 	ft_bzero(&meta, sizeof(meta));
-	printf("Parsing %p\n", start);
+//	printf("Parsing %p\n", start);
 	if (parse_fat_header(file, &meta.fat, start))
 	{
-		//When dev is done regroup all this in a if (... || ...)
-		print_fat_header(&meta.fat);
-		if (!parse_fat_arch(&meta.fat))
+		if (!parse_fat_arch(&meta.fat) || !explore_fat_archs(&meta.fat))
+		{
+			cleanup_fat(&meta.fat);
 			return (0);
-		print_fat_arch(&meta.fat);
-		if (!explore_fat_archs(&meta.fat))
-			return (0);
-		cleanup_fat(&meta.fat); //if 0 is returned still call this
+		}
+//		print_fat_header(&meta.fat);
+//		print_fat_arch(&meta.fat);
 	}
 	else if (parse_macho_header(file, &meta.macho, start))
 	{
-		print_macho_header(&meta.macho);
-		if (!parse_load_commands(&meta.macho))
+		if (!parse_load_commands(&meta.macho) || !extract_symbols(&meta.macho))
+		{
+			cleanup_macho(&meta.macho);
 			return (0);
-		print_lc_tab(&meta.macho);
-		if (!extract_symbols(&meta.macho))
-			return (0);
+		}
+//		print_macho_header(&meta.macho);
+//		print_lc_tab(&meta.macho);
 		print_sym_tab(&meta.macho);
-        cleanup_macho(&meta.macho); //if 0 is returned still call this
 	}
 	else
 	{

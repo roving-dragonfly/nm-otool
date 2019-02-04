@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/02 14:55:23 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/04 13:18:34 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/04 19:22:52 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	parse_fat_header(t_binfile *file, t_fat *metadata, void *start)
 {
 	uint32_t	magic;
 
+	if (start > file->end - sizeof(struct fat_header))
+		return (0);
 	metadata->file = file;
 	magic = *(uint32_t*)start;
 	if (magic == FAT_MAGIC || magic == FAT_CIGAM)
