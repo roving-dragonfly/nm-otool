@@ -152,10 +152,10 @@ int parse_file(t_binfile *file, void *start)
 //		print_lc_tab(&meta.macho);
 		print_sym_tab(&meta.macho);
 	}
-	else if (parse_static_lib_header(file, &meta.ar, start))
-	{
-		printf("STATIC LIB\n");
-	}
+	/* else if (parse_static_lib_header(file, &meta.ar, start)) */
+	/* { */
+	/* 	printf("STATIC LIB\n"); */
+	/* } */
 	else
 	{
 		ft_error(2, (char*[]){"Unrecognized format : ", file->filename},
