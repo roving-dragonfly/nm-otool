@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 21:50:26 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/04 20:13:38 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/06 20:02:59 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 # define T_PARSING_FAILED 6
 # define T_CORRUPT_FILE 7
 
+//to remove
 # define T_STATIC_MAGIC 0x213C617263683E0A
 # define T_STATIC_CIGAM 0X0A3E686372613C21
 
@@ -57,6 +58,7 @@ struct	s_binfile
 	char					*filename;
     void					*start;
 	void					*end;
+	t_list					*sym_list;
 
 };
 typedef	struct s_binfile t_binfile;
@@ -64,6 +66,8 @@ typedef	struct s_binfile t_binfile;
 struct	s_symbol
 {
 	uint64_t					is64;
+	char						*name;
+	struct symtab_command		*symtab;
 	union u_nlist
 	{
 		struct nlist			n32;
@@ -99,9 +103,21 @@ struct	s_macho
 	struct s_swap				*s;
 	void						*lc_start;
 	void						**lc_tab;
-	t_list						*sym_list;
+	t_list						*seg_list;
 };
 typedef	struct s_macho t_macho;
+
+struct	s_segment
+{
+	union u_segment
+	{
+		struct segment_command		s32;
+		struct segment_command_64	s64;
+	}								*seg;
+	uint64_t						is64;
+	void							**sect_tab;
+};
+typedef	struct s_segment t_segment;
 
 struct	s_static_lib
 {
@@ -109,6 +125,7 @@ struct	s_static_lib
 	struct s_swap				*s;
 };
 typedef	struct s_static_lib t_static_lib;
+
 
 union	u_metadata
 {
@@ -193,11 +210,28 @@ int				parse_symtable(t_macho *meta, struct symtab_command *symtab);
 /*
 ** populate_symtab.c
 */
-int				populate_symtable(t_macho *meta, struct symtab_command *symtab);
+int				populate_symlist(t_macho *meta, struct symtab_command *symtab);
+
+/*
+** parse_segments.c
+*/
+int				parse_segments(t_macho *meta);
+
+
+/*
+** parse_symbols_data.c
+*/
+int				parse_symbols_data(t_macho *meta);
+
+/*
+** parse_sections.c
+*/
+int				parse_sections(t_macho *meta, t_segment *seg);
 
 /*
 ** cleanup.c
 */
+void			cleanup_binfile(t_binfile *file);
 void			cleanup_macho(t_macho *meta);
 void			cleanup_fat(t_fat *meta);
 

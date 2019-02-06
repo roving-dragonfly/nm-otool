@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 13:51:03 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/04 19:27:39 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/06 19:58:00 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,21 @@ int	explore_fat_archs(t_fat *meta)
     i = 0;
     while (i < meta->hdr.nfat_arch)
 	{
-		arch = meta->is64 ?
-			meta->file->start +
-			swap_uint64(meta->s, meta->arch[i]->fat64.offset) :
-			meta->file->start +
-			swap_uint32(meta->s, meta->arch[i]->fat32.offset);
+		printf("\nNEW MACHO\n");
+		arch = meta->is64 ?	meta->file->start +	swap_uint64(meta->s,
+		meta->arch[i]->fat64.offset) : meta->file->start +
+		swap_uint32(meta->s, meta->arch[i]->fat32.offset);
 		if (incongruent_ptr(meta, arch, meta->arch[i]))
 			return (0);
-		// Future me remember this shiet if you change t_binfile struct !!
 		file.start = (void*)arch;
-		file.end = (void*)arch + (meta->is64 ?
-				  swap_uint64(meta->s, meta->arch[i]->fat64.size) :
-				  swap_uint32(meta->s, meta->arch[i]->fat32.size));
+		file.end = (void*)arch + (meta->is64 ? swap_uint64(meta->s,
+		meta->arch[i]->fat64.size) : swap_uint32(meta->s, meta->arch[i]->fat32.size));
 		file.filename = meta->file->filename;
+		file.sym_list = meta->file->sym_list;
 		if (!parse_file(&file, arch))
 			return (0);
+        if (!meta->file->sym_list)
+			meta->file->sym_list = file.sym_list;
 		i++;
 	}
 	return (1);

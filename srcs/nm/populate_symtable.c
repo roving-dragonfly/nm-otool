@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/04 17:14:29 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/04 18:44:40 by aalves           ###   ########.fr       */
+/*   Created: 2019/02/06 14:26:41 by aalves            #+#    #+#             */
+/*   Updated: 2019/02/06 19:30:35 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,11 @@ static t_list	*link_symdata(t_macho *meta, void *sym)
 		nlist.nlist.n32.n_value = swap_uint32(meta->s, nlist.nlist.n32.n_value);
 	}
     if (!(link = ft_lstnew(&nlist, sizeof(t_symbol))))
-	{
+	{ 
 		ft_error(2, (char*[]){"malloc failed : ",
 					meta->file->filename}, 0);
 		return (NULL);
+
 	}
 	return (link);
 }
@@ -44,7 +45,7 @@ static t_list	*link_symdata(t_macho *meta, void *sym)
 /*
 ** Symtable allocation, trusts the data
 */
-int	populate_symtable(t_macho *meta, struct symtab_command *symtab)
+int	populate_symlist(t_macho *meta, struct symtab_command *symtab)
 {
 	size_t		i;
 	size_t		offset;
@@ -56,13 +57,13 @@ int	populate_symtable(t_macho *meta, struct symtab_command *symtab)
 	n_syms = swap_uint32(meta->s, symtab->nsyms);
 	while (i < n_syms)
 	{
-
 		if (!(link = link_symdata(meta, meta->file->start + offset)))
 			return (0);
-		if (!meta->sym_list)
-			meta->sym_list = link;
+		else if (!meta->file->sym_list)
+			meta->file->sym_list = link;
 		else
-			ft_lstadd(&meta->sym_list, link);
+			ft_lstadd(&meta->file->sym_list, link);
+		((t_symbol*)link->content)->symtab = symtab;
 		offset += meta->is64 ?
 			sizeof(struct nlist_64) : sizeof(struct nlist);
 		i++;

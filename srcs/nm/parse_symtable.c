@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 15:33:11 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/04 17:48:58 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/06 14:42:21 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	parse_symtable(t_macho *meta, struct symtab_command *symtab)
 		i++;
 	}
 	if (incongruent_size(meta, symtab, offset) ||
-		!populate_symtable(meta, symtab))
+		!populate_symlist(meta, symtab))
 		return (0);
 	return (1);
 }

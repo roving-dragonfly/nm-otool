@@ -14,6 +14,9 @@ NM_SRCS =	srcs/nm/file_handling.c \
 		srcs/nm/parse_static_lib_header.c \
                 srcs/nm/extract_symbols.c \
                 srcs/nm/parse_symtable.c \
+                srcs/nm/parse_segments.c \
+                srcs/nm/parse_sections.c \
+		srcs/nm/parse_symbol_data.c \
 		srcs/nm/populate_symtable.c \
 		srcs/nm/cleanup.c \
 		srcs/nm/swapping/swap_tab.c \

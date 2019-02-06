@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/02 15:32:04 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/04 20:19:03 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/06 19:51:56 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,48 @@ static void print_fat_arch(t_fat *meta)
 	}
 }
 
+static void print_seglist(t_macho *meta)
+{
+	t_list *link = meta->seg_list;
+	t_segment *seg;
+
+	while (link)
+	{
+		seg = link->content;
+		if (seg->is64)
+		{
+			printf("\nSegment 64\n");
+			printf("name : %s\n", seg->seg->s64.segname);
+			printf("vmaddr : %llx\n", swap_uint64(meta->s, seg->seg->s64.vmaddr));
+            printf("vmsize : %llx\n", swap_uint64(meta->s, seg->seg->s64.vmsize));
+            printf("fileoff : %llx\n", swap_uint64(meta->s, seg->seg->s64.fileoff));
+            printf("filesize : %llx\n", swap_uint64(meta->s, seg->seg->s64.filesize));
+            printf("nsects : %x\n", swap_uint32(meta->s, seg->seg->s64.nsects));
+			printf("flags : %x\n", swap_uint32(meta->s, seg->seg->s64.flags));
+		}
+		else
+		{
+			printf("\nSegment 32\n");
+			printf("name : %s\n", seg->seg->s32.segname);
+			printf("vmaddr : %x\n", swap_uint32(meta->s, seg->seg->s32.vmaddr));
+            printf("vmsize : %x\n", swap_uint32(meta->s, seg->seg->s32.vmsize));
+            printf("fileoff : %x\n", swap_uint32(meta->s, seg->seg->s32.fileoff));
+            printf("filesize : %x\n", swap_uint32(meta->s, seg->seg->s32.filesize));
+            printf("nsects : %x\n", swap_uint32(meta->s, seg->seg->s32.nsects));
+			printf("flags : %x\n", swap_uint32(meta->s, seg->seg->s32.flags));
+		}
+		link = link->next;
+	}
+}
+
+
 static void print_symbol(t_list *sym_link)
 {
 	t_symbol *sym = (t_symbol*)sym_link->content;
 	printf("Symbol:\n");
     if (sym->is64)
 	{
+        printf("NAME : %s\n", sym->name);
 		printf("n_strx : %.8x\n", sym->nlist.n64.n_un.n_strx);
         printf("n_type : %x\n", sym->nlist.n64.n_type);
 		printf("n_sect : %x\n", sym->nlist.n64.n_sect);
@@ -102,6 +138,7 @@ static void print_symbol(t_list *sym_link)
 	}
 	else
 	{
+		printf("NAME : %s\n", sym->name);
 		printf("n_strx : %.8x\n", sym->nlist.n32.n_un.n_strx);
 		printf("n_type : %x\n", sym->nlist.n32.n_type);
 		printf("n_sect : %x\n", sym->nlist.n32.n_sect);
@@ -110,11 +147,12 @@ static void print_symbol(t_list *sym_link)
 	}
 }
 
-static void print_sym_tab(t_macho *meta)
+static void print_sym_tab(t_binfile *file)
 {
     t_list *link;
 
-	link = meta->sym_list;
+	link = file->sym_list;
+	printf("Printing symtable \n");
 	while (link)
 	{
 		print_symbol(link);
@@ -145,12 +183,14 @@ int parse_file(t_binfile *file, void *start)
 	{
 		if (!parse_load_commands(&meta.macho) || !extract_symbols(&meta.macho))
 		{
-			cleanup_macho(&meta.macho);
+			cleanup_macho(&meta.macho); //clean segment of some shiet
 			return (0);
 		}
+		parse_symbols_data(&meta.macho);
+		print_sym_tab(meta.macho.file);
 //		print_macho_header(&meta.macho);
 //		print_lc_tab(&meta.macho);
-		print_sym_tab(&meta.macho);
+//		print_seglist(&meta.macho);
 	}
 	/* else if (parse_static_lib_header(file, &meta.ar, start)) */
 	/* { */
