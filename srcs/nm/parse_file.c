@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/02 15:32:04 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/06 19:51:56 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/07 22:00:44 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,8 +167,6 @@ int parse_file(t_binfile *file, void *start)
 {
 	union u_metadata	meta;
 
-	ft_bzero(&meta, sizeof(meta));
-//	printf("Parsing %p\n", start);
 	if (parse_fat_header(file, &meta.fat, start))
 	{
 		if (!parse_fat_arch(&meta.fat) || !explore_fat_archs(&meta.fat))
@@ -177,27 +175,17 @@ int parse_file(t_binfile *file, void *start)
 			return (0);
  		}
 		cleanup_fat(&meta.fat);
-//		print_fat_header(&meta.fat);
-//		print_fat_arch(&meta.fat);
 	}
 	else if (parse_macho_header(file, &meta.macho, start))
 	{
 		if (!parse_load_commands(&meta.macho) || !extract_symbols(&meta.macho) ||
 			!parse_symbols_data(&meta.macho))
 		{
-			cleanup_macho(&meta.macho);//clean segment of some shiet
+			cleanup_macho(&meta.macho);
 			return (0);
 		}
-        
 		cleanup_macho(&meta.macho);
-//		print_macho_header(&meta.macho);
-//		print_lc_tab(&meta.macho);
-//		print_seglist(&meta.macho);
 	}
-	/* else if (parse_static_lib_header(file, &meta.ar, start)) */
-	/* { */
-	/* 	printf("STATIC LIB\n"); */
-	/* } */
 	else
 	{
 		ft_error(2, (char*[]){"Unrecognized format : ", file->filename},
