@@ -17,7 +17,10 @@ NM_SRCS =	srcs/nm/file_handling.c \
                 srcs/nm/parse_segments.c \
                 srcs/nm/parse_sections.c \
 		srcs/nm/parse_symbol_data.c \
-		srcs/nm/populate_symtable.c \
+                srcs/nm/populate_symtable.c \
+                srcs/nm/sort_symlist.c \
+                srcs/nm/print_symbols.c \
+		srcs/nm/print_type.c \
 		srcs/nm/cleanup.c \
 		srcs/nm/swapping/swap_tab.c \
 		srcs/nm/swapping/swap_uint16.c \

@@ -129,7 +129,7 @@ static void print_symbol(t_list *sym_link)
 	printf("Symbol:\n");
     if (sym->is64)
 	{
-        printf("NAME : %s\n", sym->name);
+        printf("NAME 64 : %s\n", sym->name);
 		printf("n_strx : %.8x\n", sym->nlist.n64.n_un.n_strx);
         printf("n_type : %x\n", sym->nlist.n64.n_type);
 		printf("n_sect : %x\n", sym->nlist.n64.n_sect);
@@ -138,7 +138,7 @@ static void print_symbol(t_list *sym_link)
 	}
 	else
 	{
-		printf("NAME : %s\n", sym->name);
+		printf("NAME 32 : %s\n", sym->name);
 		printf("n_strx : %.8x\n", sym->nlist.n32.n_un.n_strx);
 		printf("n_type : %x\n", sym->nlist.n32.n_type);
 		printf("n_sect : %x\n", sym->nlist.n32.n_sect);
@@ -152,7 +152,7 @@ static void print_sym_tab(t_binfile *file)
     t_list *link;
 
 	link = file->sym_list;
-	printf("Printing symtable \n");
+	printf("\n~~~~~Printing symtable~~~~~~~\n");
 	while (link)
 	{
 		print_symbol(link);
@@ -173,21 +173,23 @@ int parse_file(t_binfile *file, void *start)
 	{
 		if (!parse_fat_arch(&meta.fat) || !explore_fat_archs(&meta.fat))
 		{
-			cleanup_fat(&meta.fat);
+            cleanup_fat(&meta.fat);
 			return (0);
-		}
+ 		}
+		cleanup_fat(&meta.fat);
 //		print_fat_header(&meta.fat);
 //		print_fat_arch(&meta.fat);
 	}
 	else if (parse_macho_header(file, &meta.macho, start))
 	{
-		if (!parse_load_commands(&meta.macho) || !extract_symbols(&meta.macho))
+		if (!parse_load_commands(&meta.macho) || !extract_symbols(&meta.macho) ||
+			!parse_symbols_data(&meta.macho))
 		{
-			cleanup_macho(&meta.macho); //clean segment of some shiet
+			cleanup_macho(&meta.macho);//clean segment of some shiet
 			return (0);
 		}
-		parse_symbols_data(&meta.macho);
-		print_sym_tab(meta.macho.file);
+        
+		cleanup_macho(&meta.macho);
 //		print_macho_header(&meta.macho);
 //		print_lc_tab(&meta.macho);
 //		print_seglist(&meta.macho);

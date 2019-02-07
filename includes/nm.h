@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 21:50:26 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/06 20:02:59 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/07 21:13:21 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,6 +227,22 @@ int				parse_symbols_data(t_macho *meta);
 ** parse_sections.c
 */
 int				parse_sections(t_macho *meta, t_segment *seg);
+
+
+/*
+** sort_symlist.c
+*/
+void			sort_symlist(t_list *list);
+
+/*
+** print_symbols.c
+*/
+void			print_symbols(t_list *sym_list);
+
+/*
+** print_type .c
+*/
+void			print_type(t_symbol *sym);
 
 /*
 ** cleanup.c
