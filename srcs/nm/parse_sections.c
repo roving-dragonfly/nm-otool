@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 17:03:11 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/06 18:26:07 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/08 18:33:52 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ static int	populate_sectlist(t_macho *meta, t_segment *seg)
 
 	offset = seg->is64 ? sizeof(struct segment_command_64) : sizeof (struct segment_command);
 	i = 0;
-	nsects = swap_uint32(meta->s, (seg->is64 ? seg->seg->s64.nsects : seg->seg->s32.nsects));
-	if (!(seg->sect_tab = (ft_memalloc(nsects * sizeof(void*)))))
+	nsects = (seg->is64 ? seg->seg.s64.nsects : seg->seg.s32.nsects);
+	if (!(seg->sect_tab = (ft_memalloc(nsects * sizeof(void*) + 1))))
 	{
 		ft_error(2, (char*[]){"malloc failed : ",
 					meta->file->filename}, 0);
@@ -57,10 +57,11 @@ static int	populate_sectlist(t_macho *meta, t_segment *seg)
 	}
 	while (i < nsects)
 	{
-		seg->sect_tab[i] = (void*)seg->seg + offset;
+		seg->sect_tab[i] = seg->pos + offset;
 		offset += seg->is64 ? sizeof(struct section_64) : sizeof(struct section);
 		i++;
 	}
+	seg->sect_tab[i] = NULL;
 	return (1);
 }
 
@@ -71,11 +72,11 @@ int	parse_sections(t_macho *meta, t_segment *seg)
 
 	offset = seg->is64 ? sizeof(struct segment_command_64) : sizeof (struct segment_command);
 	i = 0;
-	while (i < swap_uint32(meta->s, (seg->is64 ? seg->seg->s64.nsects : seg->seg->s32.nsects)))
+	while (i < (seg->is64 ? seg->seg.s64.nsects : seg->seg.s32.nsects))
 	{
-		if (seg->is64 && corrupt_section_64(meta, (void*)seg->seg + offset))
+		if (seg->is64 && corrupt_section_64(meta, seg->pos + offset))
 			return (0);
-		else if (!seg->is64 && corrupt_section_32(meta, (void*)seg->seg + offset))
+		else if (!seg->is64 && corrupt_section_32(meta, seg->pos + offset))
             return (0);
 		offset += seg->is64 ? sizeof(struct section_64) : sizeof(struct section);
 		i++;

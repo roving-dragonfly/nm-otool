@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 21:50:26 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/07 21:13:21 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/08 19:31:18 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ struct	s_binfile
     void					*start;
 	void					*end;
 	t_list					*sym_list;
+	t_list					*seg_list;
 
 };
 typedef	struct s_binfile t_binfile;
@@ -103,7 +104,6 @@ struct	s_macho
 	struct s_swap				*s;
 	void						*lc_start;
 	void						**lc_tab;
-	t_list						*seg_list;
 };
 typedef	struct s_macho t_macho;
 
@@ -113,8 +113,9 @@ struct	s_segment
 	{
 		struct segment_command		s32;
 		struct segment_command_64	s64;
-	}								*seg;
+	}								seg;
 	uint64_t						is64;
+    void							*pos;
 	void							**sect_tab;
 };
 typedef	struct s_segment t_segment;
@@ -237,12 +238,12 @@ void			sort_symlist(t_list *list);
 /*
 ** print_symbols.c
 */
-void			print_symbols(t_list *sym_list);
+void			print_symbols(t_binfile *file);
 
 /*
 ** print_type .c
 */
-void			print_type(t_symbol *sym);
+void			print_type(t_binfile *file, t_symbol *sym);
 
 /*
 ** cleanup.c
