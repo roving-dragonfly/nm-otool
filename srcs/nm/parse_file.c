@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/02 15:32:04 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/08 18:04:49 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/09 18:46:36 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,61 @@ static void print_fat_arch(t_fat *meta)
 	}
 }
 
+static void print_sections(t_segment *seg)
+{
+    size_t	i = 0;
+
+	while (seg->sect_tab[i])
+	{
+		printf("Sectname : %s\n", ((struct section*)seg->sect_tab[i])->sectname);
+		printf("Segname : %s\n", ((struct section*)seg->sect_tab[i])->segname);
+		i++;
+	}
+}
+
+static void print_seglist(t_macho *meta)
+{
+	t_list *link = meta->seg_list;
+	t_segment *seg;
+
+	while (link->next)
+		link = link->next;
+
+	while (link)
+	{
+		seg = link->content;
+		if (seg->is64)
+		{
+			printf("\nSegment 64\n");
+			printf("name : %s\n", seg->seg.s64.segname);
+			printf("vmaddr : %llx\n", seg->seg.s64.vmaddr);
+            printf("vmsize : %llx\n",  seg->seg.s64.vmsize);
+            printf("fileoff : %llx\n",  seg->seg.s64.fileoff);
+            printf("filesize : %llx\n", seg->seg.s64.filesize);
+			printf("maxprot : %x\n", seg->seg.s64.maxprot);
+			printf("initprot : %x\n", seg->seg.s64.initprot);
+			printf("nsects : %x\n", seg->seg.s64.nsects);
+			printf("flags : %x\n", seg->seg.s64.flags);
+		}
+		else
+		{
+			printf("\nSegment 32\n");
+			printf("name : %s\n", seg->seg.s32.segname);
+			printf("vmaddr : %x\n", seg->seg.s32.vmaddr);
+            printf("vmsize : %x\n",  seg->seg.s32.vmsize);
+            printf("fileoff : %x\n",  seg->seg.s32.fileoff);
+            printf("filesize : %x\n", seg->seg.s32.filesize);
+			printf("maxprot : %x\n", seg->seg.s32.maxprot);
+			printf("initprot : %x\n", seg->seg.s32.initprot);
+            printf("nsects : %x\n", seg->seg.s32.nsects);
+			printf("flags : %x\n", seg->seg.s32.flags);
+		}
+		print_sections(seg);
+		link = link->prev;
+	}
+}
+
+
 /*
 ** Recursively parses file by format, populating symbol table on the way
 */
@@ -134,6 +189,7 @@ int parse_file(t_binfile *file, void *start)
 {
 	union u_metadata	meta;
 
+	ft_bzero(&meta, sizeof(union u_metadata));
 	if (parse_fat_header(file, &meta.fat, start))
 	{
 		if (!parse_fat_arch(&meta.fat) || !explore_fat_archs(&meta.fat))
@@ -151,7 +207,7 @@ int parse_file(t_binfile *file, void *start)
 			cleanup_macho(&meta.macho);
 			return (0);
 		}
-		//	print_seglist(&meta.macho);
+//		print_seglist(&meta.macho);
 		cleanup_macho(&meta.macho);
 	}
 	else

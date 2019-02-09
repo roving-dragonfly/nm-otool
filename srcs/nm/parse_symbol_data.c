@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 15:13:48 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/07 19:03:10 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/09 18:48:19 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,50 @@ static int	incongruent_symbol(t_macho *meta, t_symbol *sym)
 		return (1);
 	}
 	return (0);
+}
+
+static void *get_section(t_macho *meta, uint8_t n)
+{
+	t_list		*link;
+	t_segment	*seg;
+
+	link = meta->seg_list;
+	while (link->next)
+		link = link->next;
+	while (link)
+	{
+		seg = link->content;
+		if (n <= (seg->is64 ? seg->seg.s64.nsects : seg->seg.s32.nsects))
+            break;
+		n -= (seg->is64 ? seg->seg.s64.nsects : seg->seg.s32.nsects);
+		link = link->prev;
+	}
+	if (!link && (n > (seg->is64 ? seg->seg.s64.nsects : seg->seg.s32.nsects)))
+	{
+		ft_error(2, (char*[]){"symbol corrupt : ",
+					meta->file->filename}, T_CORRUPT_FILE);
+		return (NULL);
+	}
+	return (seg->sect_tab[n - 1]);
+}
+
+
+static int	save_symbol_sect(t_macho *meta, t_symbol *sym)
+{
+	uint8_t	n_sect;
+
+	n_sect = (sym->is64 ? sym->nlist.n64.n_sect : sym->nlist.n32.n_sect);
+	if (((sym->is64 ? sym->nlist.n64.n_type : sym->nlist.n32.n_type) & N_TYPE) != N_SECT)
+		return (1);
+	if (n_sect == 0)
+	{
+		ft_error(2, (char*[]){"symbol corrupt : ",
+					meta->file->filename}, T_CORRUPT_FILE);
+		return (0);
+	}
+	if (!(sym->section = get_section(meta, n_sect)))
+		return (0);
+	return (1);
 }
 
 static int	save_symbol_string(t_macho *meta, t_symbol *sym)
@@ -66,9 +110,9 @@ int	parse_symbols_data(t_macho *meta)
 			continue;
 		}
 		if (incongruent_symbol(meta, link->content) ||
-			!save_symbol_string(meta, link->content))
+			!save_symbol_string(meta, link->content) ||
+			!save_symbol_sect(meta, link->content))
 			return (0);
-
 		link = link->next;
 	}
 	return (1);

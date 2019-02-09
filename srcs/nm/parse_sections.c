@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/06 17:03:11 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/08 18:33:52 by aalves           ###   ########.fr       */
+/*   Created: 2019/02/09 19:05:58 by aalves            #+#    #+#             */
+/*   Updated: 2019/02/09 19:09:46 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 static int	corrupt_section_64(t_macho *meta, struct section_64 *sect)
 {
 	if (meta->file->end < (void*)sect + sizeof(struct section_64) ||
-		meta->file->end < meta->file->start +
-		swap_uint32(meta->s, sect->offset) + swap_uint64(meta->s, sect->size))
+		(ft_strcmp(sect->sectname, "__bss") && meta->file->end < meta->file->start +
+		 swap_uint32(meta->s, sect->offset) + swap_uint64(meta->s, sect->size)))
 	{
+		printf("sectname %s\n", sect->sectname);
 		ft_error(2, (char*[]){"section 64 corrupt : ",
 					meta->file->filename}, T_CORRUPT_FILE);
 		return (1);
@@ -31,7 +32,6 @@ static int	corrupt_section_32(t_macho *meta, struct section *sect)
 		meta->file->end < meta->file->start +
 		swap_uint32(meta->s, sect->offset) + swap_uint32(meta->s, sect->size))
 	{
-		printf("offset : %x, size : %x \n", swap_uint32(meta->s, sect->offset) , swap_uint32(meta->s, sect->size));
 		ft_error(2, (char*[]){"section 32 corrupt : ",
 					meta->file->filename}, T_CORRUPT_FILE);
 		return (1);
@@ -48,8 +48,9 @@ static int	populate_sectlist(t_macho *meta, t_segment *seg)
 
 	offset = seg->is64 ? sizeof(struct segment_command_64) : sizeof (struct segment_command);
 	i = 0;
-	nsects = (seg->is64 ? seg->seg.s64.nsects : seg->seg.s32.nsects);
-	if (!(seg->sect_tab = (ft_memalloc(nsects * sizeof(void*) + 1))))
+	if (!(nsects = (seg->is64 ? seg->seg.s64.nsects : seg->seg.s32.nsects)))
+		return (1);
+	if (!(seg->sect_tab = (ft_memalloc(sizeof(void*) * (nsects + 1)))))
 	{
 		ft_error(2, (char*[]){"malloc failed : ",
 					meta->file->filename}, 0);

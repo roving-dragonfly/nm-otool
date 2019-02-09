@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 21:50:26 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/08 19:31:18 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/09 18:58:06 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@
 # define T_STATIC_MAGIC 0x213C617263683E0A
 # define T_STATIC_CIGAM 0X0A3E686372613C21
 
-# define T_NM_FLAGS "gpr"
-# define T_EXTERNAL_FLAG	0x0000000000000001
+# define T_NM_FLAGS "a"
+# define T_DEBUG_FLAG		0x0000000000000001
 # define T_NOSORT_FLAG		0x0000000000000002
 # define T_REVERSESORT_FLAG	0x0000000000000004
 
@@ -59,8 +59,6 @@ struct	s_binfile
     void					*start;
 	void					*end;
 	t_list					*sym_list;
-	t_list					*seg_list;
-
 };
 typedef	struct s_binfile t_binfile;
 
@@ -69,6 +67,7 @@ struct	s_symbol
 	uint64_t					is64;
 	char						*name;
 	struct symtab_command		*symtab;
+	void						*section;
 	union u_nlist
 	{
 		struct nlist			n32;
@@ -104,6 +103,7 @@ struct	s_macho
 	struct s_swap				*s;
 	void						*lc_start;
 	void						**lc_tab;
+	t_list						*seg_list;
 };
 typedef	struct s_macho t_macho;
 
@@ -139,7 +139,7 @@ union	u_metadata
 ** nm.c
 */
 int				main(int argc, char **argv);
-void			ft_nm(t_proc_infos *cmd, t_binfile *file);
+int				ft_nm(t_proc_infos *cmd, t_binfile *file);
 
 /*
 ** parse_cl.c
@@ -238,12 +238,12 @@ void			sort_symlist(t_list *list);
 /*
 ** print_symbols.c
 */
-void			print_symbols(t_binfile *file);
+void			print_symbols(t_proc_infos *pi, t_list *sym_list);
 
 /*
 ** print_type .c
 */
-void			print_type(t_binfile *file, t_symbol *sym);
+void			print_type(t_symbol *sym);
 
 /*
 ** cleanup.c

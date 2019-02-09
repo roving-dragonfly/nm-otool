@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 16:26:41 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/08 18:58:00 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/09 18:47:07 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,25 +59,6 @@ static t_list	*parse_segment32(t_macho *meta, struct segment_command *seg)
 	return (link);
 }
 
-static t_list	*parse_segment64(t_macho *meta, struct segment_command_64 *seg)
-{
-	t_list		*link;
-
-	if (meta->file->end < (void*)seg + sizeof(struct segment_command_64))
-	{
-		ft_error(2, (char*[]){"segment_command corrupt : ",
-					meta->file->filename}, T_CORRUPT_FILE);
-		return (NULL);
-	}
-	if (!(link = ft_lstnew(&((t_segment){*(union u_segment*)seg, 1, (void*)seg, NULL}), sizeof(t_segment))))
-	{
-		ft_error(2, (char*[]){"malloc failed : ",
-					meta->file->filename}, 0);
-		return (NULL);
-	}
-	return (link);
-}
-
 /* static void print_seg(t_segment *seg) */
 /* { */
 /*   		if (seg->is64) */
@@ -106,8 +87,28 @@ static t_list	*parse_segment64(t_macho *meta, struct segment_command_64 *seg)
 /*             printf("nsects : %x\n", seg->seg.s32.nsects); */
 /* 			printf("flags : %x\n", seg->seg.s32.flags); */
 /* 		} */
-        
 /* } */
+
+
+static t_list	*parse_segment64(t_macho *meta, struct segment_command_64 *seg)
+{
+	t_list		*link;
+
+	if (meta->file->end < (void*)seg + sizeof(struct segment_command_64))
+	{
+		ft_error(2, (char*[]){"segment_command corrupt : ",
+					meta->file->filename}, T_CORRUPT_FILE);
+		return (NULL);
+	}
+	if (!(link = ft_lstnew(&((t_segment){*(union u_segment*)seg, 1, (void*)seg, NULL}), sizeof(t_segment))))
+	{
+		ft_error(2, (char*[]){"malloc failed : ",
+					meta->file->filename}, 0);
+		return (NULL);
+	}
+	return (link);
+}
+
 
 /*
 ** Parses all segments in lc_tab, stores data in seg_list
@@ -134,10 +135,10 @@ int parse_segments(t_macho *meta)
 		swap_segment(meta, link->content);
 		if (!parse_sections(meta, link->content))
 			return (0);
-		if (!meta->file->seg_list)
-            meta->file->seg_list = link;
+		if (!meta->seg_list)
+            meta->seg_list = link;
 		else
-	 		ft_lstadd(&meta->file->seg_list, link);
+	 		ft_lstadd(&meta->seg_list, link);
 		i++;
 	}
 	return (1);

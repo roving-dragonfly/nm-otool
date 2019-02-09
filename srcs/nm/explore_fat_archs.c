@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 13:51:03 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/08 16:39:29 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/09 18:26:29 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,9 @@ int	explore_fat_archs(t_fat *meta)
 		meta->arch[i]->fat64.size) : swap_uint32(meta->s, meta->arch[i]->fat32.size));
 		file.filename = meta->file->filename;
         file.sym_list = meta->file->sym_list;
-		file.seg_list = meta->file->seg_list;
 		if (!parse_file(&file, arch))
 			return (0);
-        meta->file->sym_list = file.sym_list;
-		meta->file->seg_list = file.seg_list;
+		meta->file->sym_list = file.sym_list;
 		i++;
 	}
 	return (1);
