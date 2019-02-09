@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 12:55:14 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/04 12:55:14 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/09 22:27:01 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	incongruent_ptr(t_macho *meta, void *p)
 		- sizeof(struct load_command) ||
 		p > meta->file->end)
 	{
-        ft_error(2, (char*[]){"load command corrupted :",
+        ft_error(2, (char*[]){"load command corrupted : ",
 					meta->file->filename}, T_CORRUPT_FILE);
 		return (1);
 	}
@@ -30,7 +30,7 @@ static int	incongruent_size(t_macho *meta, size_t offset)
 {
 	if (offset != meta->hdr.hdr32.sizeofcmds)
 	{
-		ft_error(2, (char*[]){"load command wrong offset :"}, T_CORRUPT_FILE);
+		ft_error(2, (char*[]){"load command wrong offset : "}, T_CORRUPT_FILE);
 		return (1);
 	}
 	return (0);

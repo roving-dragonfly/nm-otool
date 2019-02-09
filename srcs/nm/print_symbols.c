@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/07 19:39:09 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/09 19:03:29 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/09 21:31:41 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,27 +49,28 @@ static void	print_symbol(t_symbol *sym)
 	ft_putchar('\n');	
 }
 
-static uint32_t	filter_syms(t_proc_infos *pi, t_symbol *sym)
+static uint32_t	filter_syms(t_proc_infos *pi, t_symbol *sym, struct s_arch arch)
 {
-	if (sym->is64 != (sizeof(void*) == 8 ? 1 : 0))
+	if (!same_arch(sym, &arch))
 		return (0);
 	if (((sym->is64 ? sym->nlist.n64.n_type : sym->nlist.n32.n_type) & N_STAB)
 		&& !(pi->flags & T_DEBUG_FLAG))
         return (0);
 	return (1);
-
 }
 
 static void print_sym_tab(t_proc_infos *pi, t_list *sym_list)
 {
-	t_list		*link;
-	t_symbol	*sym;
+	t_list			*link;
+	t_symbol		*sym;
+	struct s_arch	default_arch;
 
 	link = sym_list;
+	default_arch = get_default_arch(sym_list);
 	while (link)
 	{
 		sym = link->content;
-		if (filter_syms(pi, sym))
+		if (filter_syms(pi, sym, default_arch))
 			print_symbol(link->content);
 		link = link->next;
 	}

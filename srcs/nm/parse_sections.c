@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 19:05:58 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/09 19:09:46 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/09 20:42:19 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 static int	corrupt_section_64(t_macho *meta, struct section_64 *sect)
 {
-	if (meta->file->end < (void*)sect + sizeof(struct section_64) ||
-		(ft_strcmp(sect->sectname, "__bss") && meta->file->end < meta->file->start +
-		 swap_uint32(meta->s, sect->offset) + swap_uint64(meta->s, sect->size)))
+	if (meta->file->end < (void*)sect + sizeof(struct section_64))
 	{
 		printf("sectname %s\n", sect->sectname);
 		ft_error(2, (char*[]){"section 64 corrupt : ",
@@ -28,9 +26,7 @@ static int	corrupt_section_64(t_macho *meta, struct section_64 *sect)
 
 static int	corrupt_section_32(t_macho *meta, struct section *sect)
 {
-	if (meta->file->end < (void*)sect + sizeof(struct section) ||
-		meta->file->end < meta->file->start +
-		swap_uint32(meta->s, sect->offset) + swap_uint32(meta->s, sect->size))
+	if (meta->file->end < (void*)sect + sizeof(struct section))
 	{
 		ft_error(2, (char*[]){"section 32 corrupt : ",
 					meta->file->filename}, T_CORRUPT_FILE);

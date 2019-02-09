@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/02 15:32:04 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/09 18:46:36 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/09 21:52:45 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ static void print_sections(t_segment *seg)
 {
     size_t	i = 0;
 
-	while (seg->sect_tab[i])
+	while (seg->sect_tab && seg->sect_tab[i])
 	{
 		printf("Sectname : %s\n", ((struct section*)seg->sect_tab[i])->sectname);
 		printf("Segname : %s\n", ((struct section*)seg->sect_tab[i])->segname);

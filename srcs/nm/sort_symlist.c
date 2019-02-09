@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/07 19:37:09 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/07 20:09:54 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/09 20:48:42 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,13 @@
 
 static int32_t	name_sort(t_symbol *a, t_symbol *b)
 {
-	return (ft_strcmp(a->name, b->name));
+    int	ret;
+
+	ret = ft_strcmp(a->name, b->name);
+	if (!ret)
+		ret = (a->is64 ? a->nlist.n64.n_value : a->nlist.n32.n_value) -
+			(b->is64 ? b->nlist.n64.n_value : b->nlist.n32.n_value);
+	return (ret);
 }
 
 static uint32_t		list_sorted(t_list *list, int32_t (*f)(t_symbol*, t_symbol*))

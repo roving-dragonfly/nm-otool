@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 21:50:26 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/09 18:58:06 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/09 21:31:03 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ typedef	struct s_binfile t_binfile;
 
 struct	s_symbol
 {
+    cpu_type_t					cpu;
+	cpu_subtype_t				cpu_sub;
 	uint64_t					is64;
 	char						*name;
 	struct symtab_command		*symtab;
@@ -127,6 +129,11 @@ struct	s_static_lib
 };
 typedef	struct s_static_lib t_static_lib;
 
+struct	s_arch
+{
+    cpu_type_t					type;
+	cpu_subtype_t				sub;
+};
 
 union	u_metadata
 {
@@ -244,6 +251,13 @@ void			print_symbols(t_proc_infos *pi, t_list *sym_list);
 ** print_type .c
 */
 void			print_type(t_symbol *sym);
+
+/*
+** print_helpers.c
+*/
+uint32_t		same_arch(t_symbol *sym, struct s_arch *arch);
+struct s_arch	get_default_arch(t_list *sym_list);
+
 
 /*
 ** cleanup.c
