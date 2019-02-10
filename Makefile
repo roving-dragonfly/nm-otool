@@ -21,7 +21,8 @@ NM_SRCS =	srcs/nm/file_handling.c \
                 srcs/nm/sort_symlist.c \
                 srcs/nm/print_symbols.c \
                 srcs/nm/print_type.c \
-		srcs/nm/print_helpers.c \
+		srcs/nm/arch_data.c \
+		srcs/nm/print_arch_infos.c \
 		srcs/nm/cleanup.c \
 		srcs/nm/swapping/swap_tab.c \
 		srcs/nm/swapping/swap_uint16.c \

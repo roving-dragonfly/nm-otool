@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 12:55:14 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/09 22:27:01 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/10 19:31:30 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static int	incongruent_ptr(t_macho *meta, void *p)
 		- sizeof(struct load_command) ||
 		p > meta->file->end)
 	{
+		printf("");
         ft_error(2, (char*[]){"load command corrupted : ",
 					meta->file->filename}, T_CORRUPT_FILE);
 		return (1);
@@ -69,7 +70,7 @@ static void		**populate_lc_tab(t_macho *meta)
 		pt_lc = (struct load_command*)(meta->lc_start + offset);
 		lc_tab[i] = pt_lc;
 		i++;
-		offset += swap_uint64(meta->s, pt_lc->cmdsize);
+		offset += swap_uint32(meta->s, pt_lc->cmdsize);
 	}
 	lc_tab[i] = NULL;
 	return (lc_tab);
@@ -93,7 +94,7 @@ int	parse_load_commands(t_macho *meta)
 		if (incongruent_ptr(meta, (void*)pt_lc) ||
 			bad_alignement(meta, (void*)pt_lc))
 			return (0);
-		offset += swap_uint64(meta->s, pt_lc->cmdsize);
+		offset += swap_uint32(meta->s, pt_lc->cmdsize);
 		i++;
 	}
 	if (incongruent_size(meta, offset))

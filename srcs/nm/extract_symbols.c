@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 14:35:03 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/04 16:07:18 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/10 19:34:53 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	incongruent_struct(t_macho *meta, struct symtab_command *symtab)
 {
-	if (symtab->cmdsize != sizeof(struct symtab_command) ||
+	if (swap_uint32(meta->s, symtab->cmdsize) != sizeof(struct symtab_command) ||
 		meta->file->end < meta->file->start + swap_uint32(meta->s,
 			symtab->symoff) + swap_uint32(meta->s, symtab->strsize))
 	{

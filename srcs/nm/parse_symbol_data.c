@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 15:13:48 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/09 18:48:19 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/10 20:22:46 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,12 @@ static int	incongruent_symbol(t_macho *meta, t_symbol *sym)
 		if (meta->file->end < meta->file->start +
 			swap_uint32(meta->s, sym->symtab->stroff) + strx ||
 			strx > swap_uint32(meta->s, sym->symtab->strsize))
-	{
-		ft_error(2, (char*[]){"string table corrupt : ",
-					meta->file->filename}, T_CORRUPT_FILE);
+		{
+            printf("strx = %x\n", strx);
+			printf("stroff = %x\n", swap_uint32(meta->s, sym->symtab->stroff));
+			printf("strsize = %x\n", swap_uint32(meta->s, sym->symtab->strsize));
+			ft_error(2, (char*[]){"string table corrupt : ",
+						meta->file->filename}, T_CORRUPT_FILE);
 		return (1);
 	}
 	return (0);
@@ -97,6 +100,33 @@ static int	save_symbol_string(t_macho *meta, t_symbol *sym)
 	return (1);
 }
 
+static void print_symbol(t_list *sym_link)
+{
+	t_symbol *sym = (t_symbol*)sym_link->content;
+	printf("Symbol:\n");
+    if (sym->is64)
+	{
+//        printf("NAME 64 : %s\n", sym->name);
+        printf("64\n");
+		printf("n_strx : %.8x\n", sym->nlist.n64.n_un.n_strx);
+        printf("n_type : %x\n", sym->nlist.n64.n_type);
+		printf("n_sect : %x\n", sym->nlist.n64.n_sect);
+        printf("n_desc : %.4x\n", sym->nlist.n64.n_desc);
+		printf("n_value : %.16llx\n", sym->nlist.n64.n_value);
+	}
+	else
+	{
+
+//		printf("NAME 32 : %s\n", sym->name);
+		printf("32\n");
+		printf("n_strx : %.8x\n", sym->nlist.n32.n_un.n_strx);
+		printf("n_type : %x\n", sym->nlist.n32.n_type);
+		printf("n_sect : %x\n", sym->nlist.n32.n_sect);
+		printf("n_desc : %.4x\n", sym->nlist.n32.n_desc);
+		printf("n_value : %.8x\n", sym->nlist.n32.n_value);
+	}
+}
+
 int	parse_symbols_data(t_macho *meta)
 {
 	t_list		*link;
@@ -104,14 +134,15 @@ int	parse_symbols_data(t_macho *meta)
 	link = meta->file->sym_list;
 	while (link)
 	{
-        if (((t_symbol*)link->content)->is64 != meta->is64)
+        if (((t_symbol*)link->content)->arch.type != meta->hdr.hdr32.cputype ||
+			((t_symbol*)link->content)->arch.sub != meta->hdr.hdr32.cpusubtype)
 		{
 			link = link->next;
 			continue;
 		}
 		if (incongruent_symbol(meta, link->content) ||
 			!save_symbol_string(meta, link->content) ||
-			!save_symbol_sect(meta, link->content))
+ 			!save_symbol_sect(meta, link->content))
 			return (0);
 		link = link->next;
 	}

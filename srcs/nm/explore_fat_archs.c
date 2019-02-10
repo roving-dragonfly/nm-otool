@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 13:51:03 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/09 18:26:29 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/10 20:25:50 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ int	explore_fat_archs(t_fat *meta)
     i = 0;
     while (i < meta->hdr.nfat_arch)
 	{
-		arch = (meta->is64 ? meta->file->start + swap_uint64(meta->s, meta->arch[i]->fat64.offset) : meta->file->start +
-				swap_uint32(meta->s, meta->arch[i]->fat32.offset));
+		arch = meta->file->start + (meta->is64 ? swap_uint64(meta->s, meta->arch[i]->fat64.offset) :
+									swap_uint32(meta->s, meta->arch[i]->fat32.offset));
 		if (incongruent_ptr(meta, arch, meta->arch[i]))
 			return (0);
 		file.start = (void*)arch;

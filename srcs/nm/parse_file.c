@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/02 15:32:04 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/09 21:52:45 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/10 19:35:16 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,6 +204,8 @@ int parse_file(t_binfile *file, void *start)
 		if (!parse_load_commands(&meta.macho) || !extract_symbols(&meta.macho) ||
 			!parse_segments(&meta.macho) || !parse_symbols_data(&meta.macho))
 		{
+			/* print_macho_header(&meta.macho); */
+			/* print_seglist(&meta.macho); */
 			cleanup_macho(&meta.macho);
 			return (0);
 		}

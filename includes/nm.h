@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 21:50:26 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/09 21:31:03 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/10 22:06:08 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@
 # define T_STATIC_MAGIC 0x213C617263683E0A
 # define T_STATIC_CIGAM 0X0A3E686372613C21
 
-# define T_NM_FLAGS "a"
+# define T_NM_FLAGS "av"
 # define T_DEBUG_FLAG		0x0000000000000001
-# define T_NOSORT_FLAG		0x0000000000000002
+# define T_ARCHS_FLAG		0x0000000000000002
 # define T_REVERSESORT_FLAG	0x0000000000000004
 
 struct	s_proc_infos
@@ -62,12 +62,17 @@ struct	s_binfile
 };
 typedef	struct s_binfile t_binfile;
 
+struct	s_arch
+{
+    cpu_type_t					type;
+	cpu_subtype_t				sub;
+};
+
 struct	s_symbol
 {
-    cpu_type_t					cpu;
-	cpu_subtype_t				cpu_sub;
 	uint64_t					is64;
 	char						*name;
+	struct s_arch				arch;
 	struct symtab_command		*symtab;
 	void						*section;
 	union u_nlist
@@ -102,6 +107,7 @@ struct	s_macho
 		struct mach_header_64	hdr64;
 	}							hdr;
 	uint64_t					is64;
+	struct s_arch				arch;
 	struct s_swap				*s;
 	void						*lc_start;
 	void						**lc_tab;
@@ -128,12 +134,6 @@ struct	s_static_lib
 	struct s_swap				*s;
 };
 typedef	struct s_static_lib t_static_lib;
-
-struct	s_arch
-{
-    cpu_type_t					type;
-	cpu_subtype_t				sub;
-};
 
 union	u_metadata
 {
@@ -236,7 +236,6 @@ int				parse_symbols_data(t_macho *meta);
 */
 int				parse_sections(t_macho *meta, t_segment *seg);
 
-
 /*
 ** sort_symlist.c
 */
@@ -245,7 +244,7 @@ void			sort_symlist(t_list *list);
 /*
 ** print_symbols.c
 */
-void			print_symbols(t_proc_infos *pi, t_list *sym_list);
+void			print_symbols(t_proc_infos *pi, t_binfile *file);
 
 /*
 ** print_type .c
@@ -253,11 +252,18 @@ void			print_symbols(t_proc_infos *pi, t_list *sym_list);
 void			print_type(t_symbol *sym);
 
 /*
-** print_helpers.c
+** arch_data.c
 */
-uint32_t		same_arch(t_symbol *sym, struct s_arch *arch);
-struct s_arch	get_default_arch(t_list *sym_list);
 
+struct s_arch	*get_arch_tab(t_list *sym_list);
+struct s_arch	*get_default_arch(struct s_arch *arch_tab, t_list *sym_list);
+size_t			count_archs(struct s_arch *tab);
+void			cleanup_arch_tab(t_list *sym_list);
+
+/*
+** print_arch_infos.c
+*/
+void			print_arch_infos(char *filename, struct s_arch *arch);
 
 /*
 ** cleanup.c

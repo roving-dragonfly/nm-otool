@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 14:26:41 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/09 21:23:20 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/10 20:19:08 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ int	populate_symlist(t_macho *meta, struct symtab_command *symtab)
 		else
 			ft_lstadd(&meta->file->sym_list, link);
         ((t_symbol*)link->content)->symtab = symtab;
-        ((t_symbol*)link->content)->cpu = meta->hdr.hdr64.cputype;
-		((t_symbol*)link->content)->cpu_sub = meta->hdr.hdr64.cpusubtype;
+        ((t_symbol*)link->content)->arch.type = meta->hdr.hdr32.cputype;
+		((t_symbol*)link->content)->arch.sub = meta->hdr.hdr32.cpusubtype;
 		offset += meta->is64 ?
 			sizeof(struct nlist_64) : sizeof(struct nlist);
 		i++;
