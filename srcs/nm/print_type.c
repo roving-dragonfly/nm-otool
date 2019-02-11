@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/07 20:56:02 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/10 22:22:04 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/11 16:10:53 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,12 @@ void print_type(t_symbol *sym)
 	else if ((type & N_TYPE) == N_UNDF)
 		ft_putchar('U');
 	else if ((type & N_TYPE) == N_ABS)
-        ft_putchar('A');
+		ft_putchar('A');
     else if ((type & N_TYPE) == N_SECT)
 		print_section_type(sym, type);
+	else if ((sym->is64 ? sym->nlist.n64.n_desc : sym->nlist.n32.n_desc)
+			 == REFERENCE_FLAG_UNDEFINED_NON_LAZY)
+		ft_putchar('I');
 	else
 		ft_putchar('?');
 }

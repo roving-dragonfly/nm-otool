@@ -12,6 +12,8 @@ NM_SRCS =	srcs/nm/file_handling.c \
                 srcs/nm/parse_load_commands.c \
                 srcs/nm/explore_fat_archs.c \
 		srcs/nm/parse_static_lib_header.c \
+                srcs/nm/parse_symbol_table.c \
+		srcs/nm/extract_static_symbols.c \
                 srcs/nm/extract_symbols.c \
                 srcs/nm/parse_symtable.c \
                 srcs/nm/parse_segments.c \

@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/02 15:32:04 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/10 19:35:16 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/11 18:06:46 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,6 @@ static void print_seglist(t_macho *meta)
 	}
 }
 
-
 /*
 ** Recursively parses file by format, populating symbol table on the way
 */
@@ -204,13 +203,18 @@ int parse_file(t_binfile *file, void *start)
 		if (!parse_load_commands(&meta.macho) || !extract_symbols(&meta.macho) ||
 			!parse_segments(&meta.macho) || !parse_symbols_data(&meta.macho))
 		{
-			/* print_macho_header(&meta.macho); */
-			/* print_seglist(&meta.macho); */
 			cleanup_macho(&meta.macho);
 			return (0);
 		}
-//		print_seglist(&meta.macho);
 		cleanup_macho(&meta.macho);
+	}
+	else if (parse_static_lib_header(file, &meta.ar, start))
+	{
+		if (!parse_symbol_table(&meta.ar) || !extract_static_symbols(&meta.ar))
+		{
+			cleanup_static(&meta.ar);
+            return (0);
+		}
 	}
 	else
 	{

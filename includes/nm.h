@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 21:50:26 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/10 22:06:08 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/11 18:07:58 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,9 @@ struct	s_static_lib
 {
 	t_binfile					*file;
 	struct s_swap				*s;
+	void						*sym_start;
+	void						**sym_tab;
+	void						*str_start;
 };
 typedef	struct s_static_lib t_static_lib;
 
@@ -216,6 +219,16 @@ int				extract_symbols(t_macho *meta);
 int				parse_symtable(t_macho *meta, struct symtab_command *symtab);
 
 /*
+** parse_symbol_table.c
+*/
+int				parse_symbol_table(t_static_lib *meta);
+
+/*
+** extract_static_symbols.c
+*/
+int				extract_static_symbols(t_static_lib *meta);
+
+/*
 ** populate_symtab.c
 */
 int				populate_symlist(t_macho *meta, struct symtab_command *symtab);
@@ -224,7 +237,6 @@ int				populate_symlist(t_macho *meta, struct symtab_command *symtab);
 ** parse_segments.c
 */
 int				parse_segments(t_macho *meta);
-
 
 /*
 ** parse_symbols_data.c
@@ -271,7 +283,7 @@ void			print_arch_infos(char *filename, struct s_arch *arch);
 void			cleanup_binfile(t_binfile *file);
 void			cleanup_macho(t_macho *meta);
 void			cleanup_fat(t_fat *meta);
-
+void			cleanup_static(t_static_lib *meta);
 /*
 ** Swapping interface
 */
