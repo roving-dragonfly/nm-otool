@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/07 19:39:09 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/10 22:25:26 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/12 08:34:42 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,15 @@ static void	print_symbol(t_symbol *sym)
 	print_type(sym);
 	ft_putchar(' ');
 	ft_putstr(sym->name);
-	ft_putchar('\n');	
+	ft_putchar('\n');
 }
 
-static uint32_t	filter_syms(t_proc_infos *pi, t_symbol *sym, struct s_arch *arch)
+static uint32_t	filter_syms(t_proc_infos *pi, t_symbol *sym, struct s_arch *arch, char *obj)
 {
 
 	if (sym->arch.type != arch->type || sym->arch.sub != arch->sub)
+		return (0);
+	if (obj && (sym->obj != obj))
 		return (0);
 	if (((sym->is64 ? sym->nlist.n64.n_type : sym->nlist.n32.n_type) & N_STAB)
 		&& !(pi->flags & T_DEBUG_FLAG))
@@ -61,7 +63,7 @@ static uint32_t	filter_syms(t_proc_infos *pi, t_symbol *sym, struct s_arch *arch
 	return (1);
 }
 
-static void print_sym_list(t_proc_infos *pi, t_list *sym_list, struct s_arch *arch)
+static void print_sym_list(t_proc_infos *pi, t_list *sym_list, struct s_arch *arch, char *obj)
 {
 	t_list			*link;
 	t_symbol		*sym;
@@ -70,11 +72,64 @@ static void print_sym_list(t_proc_infos *pi, t_list *sym_list, struct s_arch *ar
 	while (link)
 	{
 		sym = link->content;
-		if (filter_syms(pi, sym, arch))
-			print_symbol(link->content);
+		if (filter_syms(pi, sym, arch, obj))
+			print_symbol(sym);
 		link = link->next;
 	}
 }
+
+static void	print_obj_name(t_binfile *file, char *name)
+{
+	ft_putchar('\n');
+	ft_putstr(file->filename);
+    ft_putchar('(');
+	ft_putstr(name);
+	ft_putstr("):\n");
+}
+
+static int	printed(char **tab, char *obj)
+{
+    size_t	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		if (!ft_strcmp(tab[i], obj))
+			return (1);
+		i++;
+	}
+	tab[i] = obj;
+	return (0);
+}
+
+static void	print_by_obj(t_proc_infos *pi, t_binfile *file, struct s_arch *arch)
+{
+	t_list			*link;
+	t_symbol		*sym;
+	char			*objs[1024];
+
+	link = file->sym_list;
+	ft_bzero(objs, sizeof(objs));
+	while (link)
+	{
+		sym = link->content;
+		link = link->next;
+		if (sym->arch.type != arch->type || sym->arch.sub != arch->sub)
+			continue;
+		if (sym->obj && !printed(objs, sym->obj))
+		{
+			print_obj_name(file, sym->obj);
+            print_sym_list(pi, file->sym_list, arch, sym->obj);
+			continue;
+		}
+		else if (!sym->obj)
+		{
+			print_sym_list(pi, file->sym_list, arch, NULL);
+			break;
+		}
+	}
+}
+
 
 void print_symbols(t_proc_infos *pi, t_binfile *file)
 {
@@ -85,7 +140,7 @@ void print_symbols(t_proc_infos *pi, t_binfile *file)
 	arch_tab = get_arch_tab(file->sym_list);
 	default_arch = get_default_arch(arch_tab, file->sym_list);
 	if (!(pi->flags & T_ARCHS_FLAG) && default_arch)
-		print_sym_list(pi, file->sym_list, default_arch);
+		print_by_obj(pi, file, default_arch);
 	else
 	{
 		i = 0;
@@ -96,7 +151,7 @@ void print_symbols(t_proc_infos *pi, t_binfile *file)
 				ft_putchar('\n');
 				print_arch_infos(file->filename, &arch_tab[i]);
 			}
-			print_sym_list(pi, file->sym_list, &arch_tab[i]);
+			print_by_obj(pi, file, &arch_tab[i]);
 			i++;
 		}
 	}

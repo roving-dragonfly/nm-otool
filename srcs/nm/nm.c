@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 18:03:44 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/11 16:43:02 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/12 06:46:43 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,14 @@ int	ft_nm(t_proc_infos *pi, t_binfile *file)
 {
 	if (!parse_file(file, file->start))
 		return (1);
-	//get_arch_tab(file->sym_list);
-	//	sort_symlist(file->sym_list);
+	get_arch_tab(file->sym_list);
+	sort_symlist(file->sym_list);
 	if (pi->n_files > 1)
 	{
 		ft_putstr(file->filename);
 		ft_putstr(":\n"); //maybe do something about after printing
 	}
-	/* print_symbols(pi, file); */
+	print_symbols(pi, file);
 	cleanup_arch_tab(file->sym_list);
 	cleanup_binfile(file);
 	return (0);

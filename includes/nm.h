@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 21:50:26 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/11 18:07:58 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/12 08:34:20 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ struct	s_binfile
     void					*start;
 	void					*end;
 	t_list					*sym_list;
+	char					*obj;
 };
 typedef	struct s_binfile t_binfile;
 
@@ -72,6 +73,7 @@ struct	s_symbol
 {
 	uint64_t					is64;
 	char						*name;
+	char						*obj;
 	struct s_arch				arch;
 	struct symtab_command		*symtab;
 	void						*section;
@@ -128,13 +130,20 @@ struct	s_segment
 };
 typedef	struct s_segment t_segment;
 
+struct	s_static_o
+{
+    void						*start;
+    char						*name;
+};
+typedef struct s_static_o t_static_o;
+
 struct	s_static_lib
 {
 	t_binfile					*file;
 	struct s_swap				*s;
 	void						*sym_start;
-	void						**sym_tab;
 	void						*str_start;
+    t_list						*macho_lst;
 };
 typedef	struct s_static_lib t_static_lib;
 
@@ -224,9 +233,15 @@ int				parse_symtable(t_macho *meta, struct symtab_command *symtab);
 int				parse_symbol_table(t_static_lib *meta);
 
 /*
+** populate_macho_lst.c
+*/
+int				populate_macho_lst(t_static_lib *meta);
+
+/*
 ** extract_static_symbols.c
 */
 int				extract_static_symbols(t_static_lib *meta);
+
 
 /*
 ** populate_symtab.c

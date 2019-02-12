@@ -1,6 +1,6 @@
 NM = ft_nm
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CC = clang
+CFLAGS = -Wall -Wextra -Werror # -g3 -fsanitize=address 
 NM_SRCS =	srcs/nm/file_handling.c \
 		srcs/nm/file_mapping.c \
 		srcs/nm/nm.c \
@@ -19,6 +19,7 @@ NM_SRCS =	srcs/nm/file_handling.c \
                 srcs/nm/parse_segments.c \
                 srcs/nm/parse_sections.c \
 		srcs/nm/parse_symbol_data.c \
+		srcs/nm/populate_macho_lst.c \
                 srcs/nm/populate_symtable.c \
                 srcs/nm/sort_symlist.c \
                 srcs/nm/print_symbols.c \
@@ -38,13 +39,13 @@ LFT = -L./libft -lft
 RM = rm -f
 
 .c.o:
-	$(CC) $(FLAGS) -fPIC $(INCLUDES) -o $@ -c $<
+	$(CC) $(FLAGS)  $(INCLUDES) -o $@ -c $< 
 
 all: $(NM)
 
 $(NM): $(NM_OBJS)
 	make -C $(LIBFT)
-	$(CC) $(INCLUDES) -o $(NM) $^ $(LFT)
+	$(CC) $(CFLAGS) $(INCLUDES) -o $(NM) $^ $(LFT) 
 
 clean:
 	make -C $(LIBFT) clean

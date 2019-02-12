@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 14:35:03 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/10 19:34:53 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/12 05:10:58 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	extract_symbols(t_macho *meta)
 			if (incongruent_struct(meta, meta->lc_tab[i]) ||
 				!parse_symtable(meta, meta->lc_tab[i]))
 				return (0);
-
 		}
 		i++;
 	}

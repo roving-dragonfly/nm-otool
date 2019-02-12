@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 12:55:14 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/10 19:31:30 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/12 03:22:12 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ static int	incongruent_ptr(t_macho *meta, void *p)
 		- sizeof(struct load_command) ||
 		p > meta->file->end)
 	{
-		printf("");
-        ft_error(2, (char*[]){"load command corrupted : ",
+		ft_error(2, (char*[]){"load command corrupted : ",
 					meta->file->filename}, T_CORRUPT_FILE);
 		return (1);
 	}
