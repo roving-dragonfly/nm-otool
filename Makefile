@@ -1,6 +1,7 @@
 NM = ft_nm
+OTOOL = ft_otool
 CC = clang
-CFLAGS = -Wall -Wextra -Werror # -g3 -fsanitize=address 
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address 
 NM_SRCS =	srcs/nm/file_handling.c \
 		srcs/nm/file_mapping.c \
 		srcs/nm/nm.c \
@@ -33,6 +34,35 @@ NM_SRCS =	srcs/nm/file_handling.c \
 		srcs/nm/swapping/swap_uint64.c 
 
 NM_OBJS = $(NM_SRCS:.c=.o)
+
+OTOOL_SRCS =	srcs/otool/cleanup.c \
+		srcs/otool/ft_otool.c \
+                srcs/otool/parse_cl.c \
+		srcs/otool/arch.c \
+		srcs/otool/parse_fat_arch.c \
+		srcs/otool/parse_fat_header.c \
+		srcs/otool/print_fat_header.c \
+                srcs/otool/print_macho_header.c \
+		srcs/otool/print_text_segment.c \
+		srcs/otool/parse_symbol_table.c \
+		srcs/otool/parse_file.c \
+		srcs/otool/parse_load_commands.c \
+		srcs/otool/parse_macho_header.c \
+		srcs/otool/parse_sections.c \
+                srcs/otool/parse_segments.c \
+                srcs/otool/file_handling.c \
+		srcs/otool/file_mapping.c \
+		srcs/otool/explore_fat_archs.c \
+		srcs/otool/parse_static_lib_header.c \
+		srcs/otool/explore_static_symbols.c \
+		srcs/otool/populate_macho_lst.c \
+		srcs/otool/swapping/swap_tab.c \
+		srcs/otool/swapping/swap_uint16.c \
+		srcs/otool/swapping/swap_uint32.c \
+		srcs/otool/swapping/swap_uint64.c 
+
+OTOOL_OBJS = $(OTOOL_SRCS:.c=.o)
+
 LIBFT = ./libft/
 INCLUDES = -I./includes -I./libft/includes
 LFT = -L./libft -lft
@@ -41,11 +71,15 @@ RM = rm -f
 .c.o:
 	$(CC) $(FLAGS)  $(INCLUDES) -o $@ -c $< 
 
-all: $(NM)
+all: $(NM) $(OTOOL)
 
 $(NM): $(NM_OBJS)
 	make -C $(LIBFT)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $(NM) $^ $(LFT) 
+	$(CC) $(CFLAGS) $(INCLUDES) -o $(NM) $^ $(LFT)
+
+$(OTOOL): $(OTOOL_OBJS)
+	make -C $(LIBFT)
+	$(CC) $(CFLAGS) $(INCLUDES) -o $(OTOOL) $^ $(LFT)
 
 clean:
 	make -C $(LIBFT) clean

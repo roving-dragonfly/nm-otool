@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 21:50:26 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/12 08:34:20 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/13 01:43:45 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,11 +166,6 @@ int				ft_nm(t_proc_infos *cmd, t_binfile *file);
 t_proc_infos   	*parse_cl(int argc, char **argv);
 
 /*
-** endianess.c
-*/
-void			set_system_endianess(t_proc_infos *cmd);
-
-/*
 ** file_handling.c
 */
 int				open_file(char *filename);
@@ -242,7 +237,6 @@ int				populate_macho_lst(t_static_lib *meta);
 */
 int				extract_static_symbols(t_static_lib *meta);
 
-
 /*
 ** populate_symtab.c
 */
@@ -281,7 +275,6 @@ void			print_type(t_symbol *sym);
 /*
 ** arch_data.c
 */
-
 struct s_arch	*get_arch_tab(t_list *sym_list);
 struct s_arch	*get_default_arch(struct s_arch *arch_tab, t_list *sym_list);
 size_t			count_archs(struct s_arch *tab);

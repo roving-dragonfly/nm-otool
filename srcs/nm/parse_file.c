@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/02 15:32:04 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/12 06:45:56 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/13 02:08:16 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,35 +204,12 @@ int parse_file(t_binfile *file, void *start)
 	}
 	else if (parse_macho_header(file, &meta.macho, start))
 	{
-		/* if (!parse_load_commands(&meta.macho) || !extract_symbols(&meta.macho) || */
-		/* 	!parse_segments(&meta.macho) || !parse_symbols_data(&meta.macho)) */
-		/* { */
-		/* 	cleanup_macho(&meta.macho); */
-		/* 	return (0); */
-		/* } */
-		//print_macho_header(&meta.macho);
-		if (!parse_load_commands(&meta.macho))
+		if (!parse_load_commands(&meta.macho) || !extract_symbols(&meta.macho) ||
+			!parse_segments(&meta.macho) || !parse_symbols_data(&meta.macho))
 		{
-			printf("lc\n");
+			cleanup_macho(&meta.macho);
 			return (0);
 		}
-		if (!extract_symbols(&meta.macho))
-		{
-			printf("es\n");
-			return (0);
-		}
-		if (!parse_segments(&meta.macho))
-		{
-			printf("ps\n");
-			return (0);
-		}
-		if (!parse_symbols_data(&meta.macho))
-		{
-			printf("sd\n");
-			return (0);
-		}
-
-        //print_sym_tab(meta.macho.file);
 		cleanup_macho(&meta.macho);
 	}
 	else if (parse_static_lib_header(file, &meta.ar, start))
