@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/02 14:55:23 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/13 01:28:34 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/14 16:41:10 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,5 @@ int	parse_fat_header(t_binfile *file, t_fat *metadata, void *start)
 	metadata->s = (magic == FAT_MAGIC_64 || magic == FAT_MAGIC) ?
 		noswap_tab() : swap_tab();
 	set_fat_metadata(metadata, start);
-
 	return(1);
 }
