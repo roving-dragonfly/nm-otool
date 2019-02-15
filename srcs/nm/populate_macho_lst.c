@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/12 04:26:25 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/12 06:45:34 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/15 11:34:23 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	already_in_macholst(t_static_lib *meta, struct ranlib *sym, int hdr_s
 	link = meta->macho_lst;
 	while (link)
 	{
-		if (meta->file->start + sym->ran_off + hdr_size == link->content)
+		if (meta->file->start + sym->ran_off + hdr_size == ((t_static_o*)link->content)->start)
 			return (1);
 		link = link->next;
 	}
@@ -91,7 +91,6 @@ int	populate_macho_lst(t_static_lib *meta)
 			if (!meta->macho_lst)
 				meta->macho_lst = link;
 			else
-
 				ft_lstadd(&meta->macho_lst, link);
 		}
 		sym++;

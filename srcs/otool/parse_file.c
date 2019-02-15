@@ -6,11 +6,12 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 01:25:53 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/13 05:21:33 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/15 11:57:13 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "otool.h"
+
 
 int parse_file(t_proc_infos *pi, t_binfile *file, void *start)
 {

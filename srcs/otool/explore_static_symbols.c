@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   extract_static_symbols.c                           :+:      :+:    :+:   */
+/*   explore_static_symbols.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/11 17:23:59 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/14 20:14:15 by aalves           ###   ########.fr       */
+/*   Created: 2019/02/15 11:19:02 by aalves            #+#    #+#             */
+/*   Updated: 2019/02/15 13:36:47 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	adjusted_offset(t_static_lib *meta, void *hdr)
 	return (60 + name_size);
 }
 
-//port this to nm
+
 static int	explore_by_crappy_jumps(t_proc_infos *pi, t_static_lib *meta)
 {
     void		*ar_hdr;

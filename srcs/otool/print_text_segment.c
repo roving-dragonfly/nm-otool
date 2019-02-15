@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 05:21:59 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/14 20:19:25 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/15 11:55:54 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ static void print_hexcode(t_macho *meta, uint8_t *pos, size_t n)
 
 	}
 }
+
 static void	print_obj_name(char *name)
 {
     ft_putstr("(");
@@ -127,6 +128,7 @@ static void	print_section(t_macho *meta, void *sect, t_segment *seg)
 		pos += 0x10;
 	}
 }
+
 
 void		print_text_segment(t_macho *meta)
 {

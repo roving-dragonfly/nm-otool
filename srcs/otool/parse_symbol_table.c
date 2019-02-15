@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 16:46:49 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/14 19:20:51 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/15 12:04:19 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,13 @@ static int	incongruent_size(t_static_lib *meta, uint32_t end_size)
 	return (0);
 }
 
+static void	print_archive_name(t_static_lib *meta)
+{
+	ft_putstr("Archive : ");
+	ft_putstr(meta->file->filename);
+	ft_putstr("\n");
+}
+
 int	parse_symbol_table(t_static_lib *meta)
 {
     struct ranlib	*sym;
@@ -57,5 +64,11 @@ int	parse_symbol_table(t_static_lib *meta)
 	if (incongruent_size(meta, offset) ||
 		!populate_macho_lst(meta))
 		return (0);
+	if (!meta->file->ar)
+	{
+		print_archive_name(meta);
+		meta->file->ar = 1;
+	}
+
 	return (1);
 }

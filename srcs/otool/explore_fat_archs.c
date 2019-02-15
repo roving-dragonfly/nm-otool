@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 13:51:03 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/14 20:20:19 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/15 12:06:57 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,11 @@ int	explore_fat_archs(t_proc_infos *pi, t_fat *meta)
 		file.filename = meta->file->filename;
         file.arch = meta->file->arch;
 		file.obj = NULL;
+		file.ar = meta->file->ar;
 		file.multi_arch = meta->file->multi_arch;
 		if (!parse_file(pi, &file, arch))
 			return (0);
+		meta->file->ar = file.ar;
 		i++;
 	}
 	return (1);
