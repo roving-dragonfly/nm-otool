@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 21:31:45 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/10 22:09:38 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/20 19:43:23 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ struct s_arch	*get_arch_tab(t_list *sym_list)
 	if (arch_tab[0].type)
 		return (arch_tab);
 	link = sym_list;
-	while (link->next)
+	while (link && link->next)
 		link = link->next;
 	while (link)
 	{

@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 01:39:29 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/15 12:03:37 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/20 18:00:14 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,7 +247,7 @@ int				parse_symbol_table(t_static_lib *meta);
 ** extract_static_symbols.c
 */
 int				explore_static_symbols(t_proc_infos *pi, t_static_lib *meta);
-int				explore_by_crappy_jumps(t_proc_infos *pi, t_static_lib *meta);
+
 /*
 ** populate_macho_lst.c
 */

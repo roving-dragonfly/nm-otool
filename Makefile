@@ -1,7 +1,7 @@
 NM = ft_nm
 OTOOL = ft_otool
 CC = clang
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address 
+CFLAGS = -Wall -Wextra -Werror # -g3 -fsanitize=address 
 NM_SRCS =	srcs/nm/file_handling.c \
 		srcs/nm/file_mapping.c \
 		srcs/nm/nm.c \

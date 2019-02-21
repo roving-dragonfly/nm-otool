@@ -6,7 +6,7 @@
 /*   By: aalves <aalves@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 17:23:59 by aalves            #+#    #+#             */
-/*   Updated: 2019/02/15 12:25:05 by aalves           ###   ########.fr       */
+/*   Updated: 2019/02/20 19:37:57 by aalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	explore_by_crappy_jumps(t_static_lib *meta)
 		file.obj = ar_hdr + 60;
 		if (!parse_file(&file, file.start))
 			return (0);
-        ar_hdr += size + 60;
+		ar_hdr += size + 60;
 		meta->file->sym_list = file.sym_list;
 		if (ar_hdr + 60 > meta->file->end)
 			break;
@@ -74,7 +74,7 @@ int		extract_static_symbols(t_static_lib *meta)
 
 	link = meta->macho_lst;
 	if (!link)
-        explore_by_crappy_jumps(meta);
+		return (explore_by_crappy_jumps(meta));
 	while (link->next)
 		link = link->next;
 	while (link)
